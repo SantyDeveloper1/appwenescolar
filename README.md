@@ -5,7 +5,7 @@ Permite administrar cursos, estudiantes y reportes de manera sencilla.
 
 ## 📸 Vista previa
 
-![Vista previa](https://github.com/SantyDeveloper1/appwenescolar/blob/main/public/images/default.png?raw=true)
+![Vista previa](https://github.com/SantyDeveloper1/appwenescolar/blob/main/public/images/cursos.png?raw=true)
 
 ## 🚀 Instalación
 
