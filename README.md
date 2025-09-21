@@ -1,11 +1,11 @@
 # App Web Escolar
 
-Este es el sistema web para la gestión académica de la institución educativa.  
+Sistema web para la gestión académica de la institución educativa.  
 Permite administrar cursos, estudiantes y reportes de manera sencilla.  
 
 ## 📸 Vista previa
 
-![Vista previa](https://github.com/SantyDeveloper1/appwenescolar/blob/main/public/images/captura.png?raw=true)
+![Vista previa](https://github.com/SantyDeveloper1/appwenescolar/blob/main/public/images/default.png?raw=true)
 
 ## 🚀 Instalación
 
