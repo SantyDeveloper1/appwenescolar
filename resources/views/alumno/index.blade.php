@@ -198,7 +198,6 @@
     </div>
 
     <!-- Modal Cambiar Estado -->
-    <!-- Modal Cambiar Estado -->
 <div class="modal fade" id="estadoAlumnoModal" tabindex="-1" role="dialog" aria-labelledby="estadoAlumnoLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">

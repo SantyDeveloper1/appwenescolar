@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cursos', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->string('idcurso', 13)->primary();
+            $table->string('nomCurso', 100);
+            $table->boolean('estadoCurso')->default(true);
+            $table->timestamps(); // Crea automáticamente created_at y updated_at
         });
     }
 

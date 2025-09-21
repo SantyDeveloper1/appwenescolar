@@ -300,9 +300,9 @@
               </ul>
             </li>
             <!-- cursos -->
-            <li class="nav-item {{ request()->is('cursos*') ? 'menu-open' : '' }}">
+            <li class="nav-item {{ request()->is('curso*') ? 'menu-open' : '' }}">
               <a href="#"
-                class="nav-link {{ request()->is('cursos*') ? 'active' : 'inactive' }}">
+                class="nav-link {{ request()->is('curso*') ? 'active' : 'inactive' }}">
                 <i class="fas fa-book-open"></i>
                 <p>
                   Cursos
@@ -311,15 +311,15 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="{{ url('cursos') }}"
-                    class="nav-link {{ request()->is('cursos') ? 'active' : '' }}">
+                  <a href="{{ url('curso') }}"
+                    class="nav-link {{ request()->is('curso') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Todo los cursos</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="{{ url('docente/insertDocente') }}"
-                    class="nav-link {{ request()->is('docente/insertDocente') ? 'active' : '' }}">
+                  <a href="{{ url('curso/insertCurso') }}"
+                    class="nav-link {{ request()->is('curso/insertCurso') ? 'active' : '' }}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Insertar Nuevo</p>
                   </a>
