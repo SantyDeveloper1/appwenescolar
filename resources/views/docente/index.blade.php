@@ -77,7 +77,7 @@
                                                 <td class="text-center">{{ $loop->iteration }}</td>
 
                                                 <!-- 📷 Imagen -->
-                                                <td class="text-center">
+                                                <td class="text-center tdImg">
                                                     @if($docente->imagDocente)
                                                         <img src="{{ asset('storage/'.$docente->imagDocente) }}" 
                                                             alt="Imagen del docente" class="img-thumbnail">
@@ -86,30 +86,26 @@
                                                             alt="Sin imagen" class="img-thumbnail">
                                                     @endif
                                                 </td>
-
                                                 <td class="text-center">{{ $docente->CodigoDocente }}</td>
-                                                <td>{{ $docente->NomDocente }}</td>
-                                                <td>{{ $docente->AppDocente }}</td>
-                                                <td>{{ $docente->ApmDocente }}</td>
+                                                <td class="tdNombre">{{ $docente->NomDocente }}</td>
+                                                <td class="tdApp">{{ $docente->AppDocente }}</td>
+                                                <td class="tdApm">{{ $docente->ApmDocente }}</td>
                                                 <td>{{ $docente->emailDocente }}</td>
                                                 <td>{{ $docente->FechaNacDocente }}</td>
                                                 <td class="text-center">
                                                     @if ($docente->SexoDocente === 'M')
-                                                        <span class="badge badge-primary"><i class="fas fa-male"></i>
-                                                            Masculino</span>
+                                                        <span class="badge badge-primary"><i class="fas fa-male"></i> Masculino</span>
                                                     @elseif ($docente->SexoDocente === 'F')
-                                                        <span class="badge badge-success"><i class="fas fa-female"></i>
-                                                            Femenino</span>
+                                                        <span class="badge badge-success"><i class="fas fa-female"></i> Femenino</span>
                                                     @else
-                                                        <span class="badge badge-secondary"><i class="fas fa-genderless"></i>
-                                                            Prefiere no decirlo</span>
+                                                        <span class="badge badge-secondary"><i class="fas fa-genderless"></i> Prefiere no decirlo</span>
                                                     @endif
                                                 </td>
                                                 <td>{{ $docente->GradoEstudioDocente }}</td>
                                                 <td>{{ $docente->CiudadDocente }}</td>
                                                 <td>{{ $docente->DirDocente }}</td>
-                                                <td>{{ $docente->NumTelefonoDocente }}</td>
-                                                <td class="text-center">
+                                                <td class="tdTel">{{ $docente->NumTelefonoDocente }}</td>
+                                                <td class="text-center estadoDocente">
                                                     @if ($docente->estadoDocente)
                                                         <span class="badge badge-success">Activo</span>
                                                     @else
@@ -132,24 +128,21 @@
                                                         @if (!$docente->estadoDocente) disabled @endif>
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-
                                                     <!-- Botón Cambiar Estado -->
-                                                    <button class="btn btn-sm btn-success" title="Cambiar Estado"
-                                                        onclick="toggleEstadoDocente('{{ $docente->idDocente }}', '{{ $docente->NomDocente }} {{ $docente->AppDocente }} {{ $docente->ApmDocente }}')">
-                                                        @if ($docente->estadoDocente)
-                                                            <i class="fas fa-toggle-on"></i>
-                                                        @else
-                                                            <i class="fas fa-toggle-off"></i>
-                                                        @endif
+                                                    <button class="btn btn-sm btn-success" 
+                                                            title="Cambiar Estado"
+                                                            onclick="toggleEstadoDocente('{{ $docente->idDocente }}', '{{ $docente->NomDocente }} {{ $docente->AppDocente }} {{ $docente->ApmDocente }}')">
+                                                        <i id="iconEstado{{ $docente->idDocente }}" 
+                                                        class="fas {{ $docente->estadoDocente ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
                                                     </button>
-
                                                     <!-- Botón Eliminar -->
-                                                    <button class="btn btn-sm btn-danger"
-                                                        title="{{ $docente->estadoDocente ? 'Eliminar' : 'Inactivo: no se puede eliminar' }}"
-                                                        onclick="deleteDocente('{{ $docente->idDocente }}')"
-                                                        @if (!$docente->estadoDocente) disabled @endif>
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    <!-- Botón Eliminar -->
+        <button class="btn btn-sm btn-danger"
+            title="{{ $docente->estadoDocente ? 'Eliminar' : 'Inactivo: no se puede eliminar' }}"
+            onclick="deleteDocente('{{ $docente->idDocente }}')"
+            @if (!$docente->estadoDocente) disabled @endif>
+            <i class="fas fa-trash"></i>
+        </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -163,11 +156,125 @@
             </div>
         </section>
     </div>
+
+    <!-- Modal de edición estilo Large Modal -->
+    <div class="modal fade" id="editDocenteModal" tabindex="-1" role="dialog" aria-labelledby="editDocenteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document"><!-- modal-lg para tamaño grande -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="editDocenteModalLabel">Editar Alumno</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="txtNombre">Nombre</label>
+                                <input type="text" class="form-control" id="txtNombre" name="txtNombre">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="txtTele">Teléfono</label>
+                                <input type="text" class="form-control" id="txtTele" name="txtTele">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label for="txtAppDocente">Apellido 1</label>
+                                <input type="text" class="form-control" id="txtAppDocente" name="txtAppDocente">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label for="txtApmDocente">Apellido 2</label>
+                                <input type="text" class="form-control" id="txtApmDocente" name="txtApmDocente">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label for="txtImagen">Imagen</label>
+                                <input type="file" class="form-control" id="txtImagen" name="txtImagen" accept="image/*">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between"><!-- footer con espaciado -->
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary"
+                        onclick="updateDocente($('#editDocenteModal').data('idDocente'));">Guardar cambios</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!-- Modal Cambiar Estado -->
+    <div class="modal fade" id="estadoDocenteModal" tabindex="-1" role="dialog" aria-labelledby="estadoDocenteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title" id="estadoDocenteLabel">
+                        Cambiar Estado del Alumno <span id="nombreDocenteEstado" class="font-weight-bold"></span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Radios centrados -->
+                    <div class="form-group d-flex justify-content-center">
+                        <div class="icheck-success d-inline mr-3">
+                            <input type="radio" id="radioActivo" name="estadoDocente" value="1">
+                            <label for="radioActivo">Activo</label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                            <input type="radio" id="radioInactivo" name="estadoDocente" value="0">
+                            <label for="radioInactivo">Inactivo</label>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje dinámico -->
+                    <div id="estadoMensaje" class="text-center font-weight-bold text-muted small mt-2"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarEstado">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style >
+    #estadoMensaje {
+        background: #e8f4fc;            /* celeste suave por defecto */
+        color: #0c5460;                /* azul oscuro legible */
+        padding: 12px 18px;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        line-height: 1.4;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease-in-out;
+    }
+    #estadoMensaje.success {
+        background: #e6f9f0;           /* verde suave */
+        color: #155724;
+    }
+    #estadoMensaje.danger {
+        background: #fdecea;           /* rojo suave */
+        color: #721c24;
+    }
+
+    </style>
+
 @endsection
 
 @section('js')
-    <script src="{{ asset('viewresources/alumno/update.js?=6092025') }}"></script>
-    <script src="{{ asset('viewresources/alumno/delete.js?=6092025') }}"></script>
-    <script src="{{ asset('viewresources/alumno/update.js?=6092025') }}"></script>
-    <script src="{{ asset('viewresources/alumno/state.js?=6092025') }}"></script>
+    <script src="{{ asset('viewresources/docente/insert.js?=27092025') }}"></script>
+    <script src="{{ asset('viewresources/docente/delete.js?=27092025') }}"></script>
+    <script src="{{ asset('viewresources/docente/update.js?=27092025') }}"></script>
+    <script src="{{ asset('viewresources/docente/state.js?=27092025') }}"></script>
 @endsection

@@ -142,5 +142,98 @@ class DocenteController extends Controller
         return view('docente.insertDocente');
     }
 
+    public function actionUpdate($idDocente, Request $request, SessionManager $sessionManager)
+    {
+        if (!$request->isMethod('post')) {
+            return redirect()->route('docente.edit', ['id' => $idDocente]);
+        }
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'txtNombre'     => 'required|string|max:100',
+                'txtAppDocente' => 'required|string|max:100',
+                'txtApmDocente' => 'required|string|max:100',
+                'txtTele'       => 'required|string|max:15',
+            ]
+        );
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'errors'  => $validator->errors()->all()
+                ], 422);
+            }
+            $sessionManager->flash('listMessage', $validator->errors()->all());
+            $sessionManager->flash('typeMessage', 'error');
+            return redirect()->route('docente.edit', ['id' => $idDocente])->withInput();
+        }
+
+        $docente = Docente::findOrFail($idDocente);
+
+        // ✅ revisar nombre real de la columna
+        $docente->NomDocente        = trim($request->input('txtNombre'));
+        $docente->AppDocente        = trim($request->input('txtAppDocente'));
+        $docente->ApmDocente        = trim($request->input('txtApmDocente'));
+        $docente->NumTelefonoDocente = trim($request->input('txtTele')); // 👈 ojo aquí
+
+        // ✅ Imagen
+        if ($request->hasFile('txtImagen')) {
+            if ($docente->imagDocente && $docente->imagDocente !== 'images/default.png') {
+                Storage::disk('public')->delete($docente->imagDocente);
+            }
+            $path = $request->file('txtImagen')->store('docentes', 'public');
+            $docente->imagDocente = $path;
+        }
+
+        $docente->save();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'success'     => true,
+                'message'     => 'Docente actualizado correctamente.',
+                'newImageUrl' => $docente->imagDocente
+                    ? asset('storage/' . $docente->imagDocente)
+                    : asset('images/default.png')
+            ]);
+        }
+
+        $sessionManager->flash('listMessage', ['Actualización realizada correctamente.']);
+        $sessionManager->flash('typeMessage', 'success');
+        return redirect()->route('docente.index');
+    }
+
+    public function actionDelete($idDocente, SessionManager $sessionManager)
+	{
+		$tDocente = Docente::find($idDocente);
+
+		if ($tDocente) {
+			$tDocente->delete();
+			if (request()->ajax()) {
+				return response()->json(['status' => 'success']);
+			}
+			$sessionManager->flash('listMessage', ['Registro eliminado correctamente.']);
+		}
+
+		return redirect('docente/insert');
+	}
+
+    public function actionEstado(Request $request, $idDocente)
+    {
+        $docente = Docente::find($idDocente);
+
+        if (!$docente) {
+            return response()->json(['success' => false, 'message' => 'Docente no encontrado.']);
+        }
+
+        // Actualizamos usando el campo correcto
+        $docente->estadoDocente = $request->estado == "1" ? 1 : 0;
+        $docente->save();
+
+        return response()->json(['success' => true]);
+    }
+
+
 }
 

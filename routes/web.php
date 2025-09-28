@@ -20,6 +20,9 @@ Route::put('alumno/estado/{idAlumno}', [AlumnoController::class, 'actionEstado']
 //RUTAS PARA DOCENTE
 Route::get('/docente', [DocenteController::class, 'actionDocente']);
 Route::match(['get','post'],'docente/insertDocente', [DocenteController::class, 'actionInsert']);
+Route::post('docente/update/{idDocente}', [DocenteController::class, 'actionUpdate']);
+Route::delete('docente/delete/{idDocente}', [DocenteController::class, 'actionDelete']);
+Route::put('docente/estado/{idDocente}', [DocenteController::class, 'actionEstado']);
 
 //rutas para el curso
 Route::get('/curso', [CursoController::class, 'actionCurso']);
