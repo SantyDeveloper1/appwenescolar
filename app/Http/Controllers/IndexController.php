@@ -3,9 +3,9 @@ namespace App\Http\Controllers;
  
 class IndexController extends Controller
 {
-    public function actionIndex()
-    {
+	public function actionIndex()
+	{
         return view('index/index');
-    }
+	}
 }
 ?>

@@ -7,7 +7,6 @@ use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\Grado_seccionController;
-use App\Models\Curso;
 
 Route::get('/', [IndexController::class, 'actionIndex']);
 
@@ -34,7 +33,3 @@ Route::put('curso/estado/{idCurso}', [CursoController::class, 'actionEstado']);
 //Rutas para grado seccion
 Route::get('/grado_seccion', [Grado_seccionController::class, 'actionGrado_seccion']);
 Route::match(['get', 'post'], 'grado_seccion/insertGrado_seccion', [Grado_seccionController::class, 'actionInsert']);
-
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
